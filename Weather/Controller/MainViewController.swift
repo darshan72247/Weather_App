@@ -7,16 +7,48 @@
 
 import UIKit
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController, UITextFieldDelegate{
     
+    @IBOutlet weak var searchTextField: UITextField!
     
-   
+    let weatherManager = WeatherManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+        searchTextField.delegate = self
     }
     
 
+    @IBAction func searchPressed(_ sender: UIButton) {
+        print(searchTextField.text!)
+        searchTextField.endEditing(true)
+    }
     
+    
+    
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        searchTextField.endEditing(true)
+        print(searchTextField.text!)
+        return true
+    }
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        if (textField.text != ""){
+            return true
+            
+        } else {
+            textField.placeholder = "Enter a city?"
+            return false
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        // We should have the weather data for the city they entered
+        if let city = searchTextField.text{
+            weatherManager.fetchWeather(cityName: city)
+        }
+        searchTextField.text = ""
+    }
 }

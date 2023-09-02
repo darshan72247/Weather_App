@@ -474,10 +474,7 @@
                                     <constraint firstAttribute="height" constant="34" id="BXt-ga-1zt"/>
                                 </constraints>
                                 <attributedString key="attributedText"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="keyPath" value="YES"/>
-                                </userDefinedRuntimeAttributes>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="go"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IlK-dN-fFd">
                                 <rect key="frame" x="368.33333333333331" y="68" width="49.666666666666686" height="37"/>
@@ -488,6 +485,9 @@
                                 <color key="tintColor" systemColor="labelColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="magnifyingglass" catalog="system"/>
+                                <connections>
+                                    <action selector="searchPressed:" destination="U55-dd-xM2" eventType="touchUpInside" id="5w5-ZZ-uyF"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="4u5-m7-iVR"/>
@@ -515,6 +515,9 @@
                             <constraint firstItem="BPd-Kv-mFJ" firstAttribute="top" secondItem="OLY-lK-AAu" secondAttribute="top" constant="223" id="yK6-cQ-Lae"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="searchTextField" destination="c5G-pK-0E7" id="MiF-gc-6rO"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cFm-Oc-Lsx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
