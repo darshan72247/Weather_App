@@ -7,8 +7,14 @@
 
 import Foundation
 
+protocol WeatherManagerDelegate{
+    func didUpdateWeather(weather: WeatherModel)
+}
+
 struct WeatherManager{
     let weatherURL = "https://api.openweathermap.org/data/2.5/weather?appid=e6db9a497da7d1a09339dcb34cee9994&units=metric"
+    
+    var delegate: WeatherManagerDelegate?
     
     func fetchWeather (cityName:String){
         let urlString = "\(weatherURL)&q=\(cityName)"
@@ -24,27 +30,44 @@ struct WeatherManager{
             let session = URLSession(configuration: .default)
             
             //Step 3: Give the session a task
-            let task = session.dataTask(with: url, completionHandler: handle(data:response:error:))
-            
+            let task = session.dataTask(with: url) { data, response, error in
+                if (error != nil){
+                    print(error!)
+                    return
+                }
+                if let safeData = data {
+                    if let weather = self.parseJSON(weatherData: safeData){
+                        self.delegate?.didUpdateWeather(weather: weather)
+                    }
+                }
+            }
             //Step 4: Start the task
             task.resume()
         }
-        
-        
-        
-        
     }
     
-    func handle(data:Data?, response:URLResponse? , error:Error?) {
-        if (error != nil){
-            print(error!)
-            return
-        }
+    
+    func parseJSON (weatherData: Data) -> WeatherModel?{
+        let decoder = JSONDecoder()
         
-        if let safeData = data {
-            let dataString = String(data:safeData, encoding: .utf8)
-            print(dataString)
+        do {
+            let decodedData = try decoder.decode(WeatherData.self, from: weatherData)
+            let id = decodedData.weather[0].id
+            let temp = decodedData.main.temp
+            let name = decodedData.name
+            let countryName = decodedData.sys.country
+            
+            let weather = WeatherModel(conditionId: id, cityName: name, temperature: temp, country: countryName)
+//            print(weather.conditionName)
+//            print(weather.temperatureString)
+//            print(weather.country)
+            
+            return weather
+            
+        } catch {
+            print(error)
+            return nil
         }
-        
     }
+    
 }
